@@ -1,0 +1,24 @@
+{
+  "name": "jatabase",
+  "description": "JSON file database",
+  "version": "0.0.1",
+  "keywords": [
+    "json",
+    "database"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/GabrielJMJ/jatabase.git"
+  },
+  "author": "Gabriel Jacinto <gamjj74@hotmail.com>",
+  "devDependencies": {
+    "nodeunit": "0.9.x"
+  },
+  "main": "./src/jatabase.js",
+  "bugs": {
+    "url": "https://github.com/GabrielJMJ/jatabase/issues"
+  },
+  "dependencies": {
+    "promise": "^7.0.4"
+  }
+}
