@@ -20,5 +20,11 @@
   },
   "dependencies": {
     "promise": "^7.0.4"
-  }
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    }
+  ],
 }
