@@ -2,6 +2,8 @@ jatabase
 =========
 JSON file database with JavaScript.
 
+**Status**: Development
+
 ## Installing
 ```console
 $ npm install jatabase --save
@@ -22,12 +24,14 @@ All the persistence methods use promises, so they have an async way of using and
 Create models with the method ```createModel```. This model will contain all persistence methods lide ```add``` and ```delete```.
 ```js
 var Jatabase = require('jatabase'),
-  , jd = new Jatabase('./file.json')
-  , models = {
+  jd = new Jatabase(__dirname + '/file.json'),
+  models = {
     products: jd.createModel('products', [
         'name', 'price', 'categories', 'description'
     ])
   };
+
+module.exports = models;
 ```
 
 ### Add
