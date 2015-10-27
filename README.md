@@ -31,7 +31,7 @@ var Jatabase = require('jatabase'),
         type: 'string'
       },
       price: {
-        type: 'float'
+        type: 'number'
       },
       categories: {
         type: 'array'
@@ -47,8 +47,7 @@ module.exports = models;
 
 ### Field types
 * ```string```
-* ```integer```
-* ```float```
+* ```number```
 * ```array```
 * ```object```
 
