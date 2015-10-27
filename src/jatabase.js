@@ -15,21 +15,21 @@ var jatabase = function (file) {
 /**
  * Create a new model using jatabase model
  *
- * @param {string} name
- * @param {Array}  fields
+ * @param {string} collection
+ * @param {Object} fields
  *
  * @return {Model}
  */
-jatabase.prototype.createModel = function (name, fields) {
-  var newModel = function (db, name) {
+jatabase.prototype.createModel = function (collection, fields) {
+  var newModel = function (db, collection) {
     this.file = db;
-    this.name = name;
+    this.collection = collection;
     this.fields = fields;
   };
 
   newModel.prototype = new model;
 
-  return new newModel(this.file, name);
+  return new newModel(this.file, collection);
 };
 
 module.exports = jatabase;

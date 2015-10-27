@@ -26,13 +26,31 @@ Create models with the method ```createModel```. This model will contain all per
 var Jatabase = require('jatabase'),
   jd = new Jatabase(__dirname + '/file.json'),
   models = {
-    products: jd.createModel('products', [
-        'name', 'price', 'categories', 'description'
-    ])
+    products: jd.createModel('products', {
+      name: {
+        type: 'string'
+      },
+      price: {
+        type: 'float'
+      },
+      categories: {
+        type: 'array'
+      },
+      description: {
+        type: 'string'
+      }
+    })
   };
 
 module.exports = models;
 ```
+
+### Field types
+* ```string```
+* ```integer```
+* ```float```
+* ```array```
+* ```object```
 
 ### Add
 
