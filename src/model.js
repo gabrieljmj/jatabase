@@ -8,8 +8,7 @@
 
 'use strict';
 
-var fs = require('fs')
-  , Promise = require('promise');
+var fs = require('fs');
 
 /**
  * Merge two objects
@@ -36,6 +35,37 @@ Object.prototype.merge = function (obj2){
   return obj3;
 }
 
+Object.size = function(obj) {
+    let size = 0
+
+    for (let k in obj) {
+        if (obj.hasOwnProperty(k)) {
+          size++;
+        }
+    }
+
+    return size;
+};
+
+/**
+ * Check if all values from array property are equal
+ *
+ * @param {mixed} value
+ *
+ * @return {boolean}
+ */
+Array.prototype.allValuesSameWithValue = function (property, value) {
+  let e = true;
+
+  for (let k = 0; k < this.length; k++) {
+    if (this[k][property] != this[0][property] || this[k][property] != value) {
+      e = false;
+    }
+  }
+
+  return e;
+}
+
 /**
  * Check if all values from array are equal
  *
@@ -43,17 +73,17 @@ Object.prototype.merge = function (obj2){
  *
  * @return {boolean}
  */
-Array.prototype.allValuesSameWithValue = function (value) {
+Array.prototype.allValuesSame = function (value) {
   let e = true;
 
-  for (let k = 0; k < arr.length; k++) {
-    if (arr[k] != arr[0] || arr[k] != value) {
+  for (let k = 0; k < this.length; k++) {
+    if (this[k] != this[0] || this[k] != value) {
       e = false;
     }
   }
 
   return e;
-}
+};
 
 /**
  * Check if an array has a cetain value
@@ -97,7 +127,7 @@ Model.prototype.deleteSync = function (where) {
   let db = require(this.file);
 
   if (typeof where == 'object') {
-    if (!where.length) {
+    if (!Object.size(where)) {
       db[this.collection] = [];
     } else {
       if (this._validateFields(where)) {
@@ -127,8 +157,8 @@ Model.prototype.deleteSync = function (where) {
 
         for (let k in equals) {
           if (equals.hasOwnProperty(k)) {
-            if (equals[k].equals.allValuesSameWithValue(true)) {
-              db[this.fields][equals[k].registry]
+            if (equals[k].allValuesSameWithValue('equals', true)) {
+              db[this.collection].splice(equals[k].registry, 1);
             }
           }
         }
@@ -235,7 +265,7 @@ Model.prototype.findSync = function (where, order) {
         return false;
       }
 
-      if (!where.length) {
+      if (!Object.size(where)) {
         return this.findAllSync(order);
       }
 
@@ -262,7 +292,7 @@ Model.prototype.findSync = function (where, order) {
 
       for (let k in equals) {
         if (equals.hasOwnProperty(k)) {
-          if (allValuesSameWithValue(equals[k].equals, true)) {
+          if (equals[k].allValuesSameWithValue('equals', true)) {
             result.push(equals[k].registry);
           }
         }
@@ -394,7 +424,7 @@ Model.prototype.hasSync = function (where) {
     }
 
     for (let k in equals) {
-      if (allValuesSameWithValue(equals[k], true)) {
+      if (equals[k].allValuesSame(true)) {
         return true;
       }
     }
@@ -450,7 +480,7 @@ Model.prototype.searchSync = function (where, opts) {
         valids.push(r ? true : false);
       }
 
-      if (allValuesSameWithValue(valids, true)) {
+      if (valids.allValuesSame(true)) {
         result.push(db[this.collection][k]);
       }
     }
