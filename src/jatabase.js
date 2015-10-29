@@ -6,6 +6,8 @@
  * @package jatabase
  */
 
+'use strict';
+
 var model = require('./model');
 
 var jatabase = function (file) {

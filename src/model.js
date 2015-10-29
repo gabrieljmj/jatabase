@@ -8,7 +8,8 @@
 
 'use strict';
 
-var fs = require('fs');
+var fs = require('fs'),
+  JsonDB = require('./jsondb');
 
 /**
  * Merge two objects
@@ -110,7 +111,7 @@ Array.prototype.contains = function (value) {
   return false;
 };
 
-function ModelValidator (model) {
+var ModelValidator = function (model) {
   this.model = model;
 };
 
@@ -124,21 +125,6 @@ ModelValidator.prototype.validateFile = function () {
   if (!(field instanceof Array)) {
     throw Error('"'+  this.model.collection + '" key must be an array.');
   }
-};
-
-var JsonDB = function (file) {
-  this.file = file;
-};
-
-JsonDB.prototype.update = function (data) {
-  return fs.writeFileSync(this.file, JSON.stringify(data, null, '  '));
-};
-
-JsonDB.prototype.updateKey = function (key, value) {
-  let data = require(this.file);
-  data[key] = value;
-
-  return this.update(data);
 };
 
 /**

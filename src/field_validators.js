@@ -6,6 +6,8 @@
  * @package jatabase
  */
 
+'use strict';
+
 module.exports = {
   type: {
     number: function (value) {
