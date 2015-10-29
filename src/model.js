@@ -47,50 +47,58 @@ Object.size = function(obj) {
     return size;
 };
 
-/**
- * Check if all values from array property are equal
- *
- * @param {mixed} value
- *
- * @return {boolean}
- */
-Array.prototype.allValuesSameWithValue = function (property, value) {
-  let e = true;
-
-  for (let k = 0; k < this.length; k++) {
-    if (this[k][property] != this[0][property] || this[k][property] != value) {
-      e = false;
+Object.prototype.propertiesEqualsTo = function (object) {
+  for (var k in object) {
+    if (object.hasOwnProperty(k)) {
+      if (typeof this[k] == 'undefined' || this[k] != object[k]) {
+        return false;
+      }
     }
   }
 
-  return e;
+  return true;
+}
+
+/**
+ * Check if all values from array property are equal
+ *
+ * @param {Mixed} value
+ *
+ * @return {Boolean}
+ */
+Array.prototype.allValuesSameWithValue = function (property, value) {
+  for (let k = 0; k < this.length; k++) {
+    if (this[k][property] != this[0][property] || this[k][property] != value) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 /**
  * Check if all values from array are equal
  *
- * @param {mixed} value
+ * @param {Mixed} value
  *
- * @return {boolean}
+ * @return {Boolean}
  */
 Array.prototype.allValuesSame = function (value) {
-  let e = true;
-
   for (let k = 0; k < this.length; k++) {
     if (this[k] != this[0] || this[k] != value) {
-      e = false;
+      return false;
     }
   }
 
-  return e;
+  return true;
 };
 
 /**
  * Check if an array has a cetain value
  *
- * @param {mixed} value
+ * @param {Mixed} value
  *
- * @return {boolean}
+ * @return {Boolean}
  */
 Array.prototype.contains = function (value) {
   for (let k in this) {
@@ -102,11 +110,42 @@ Array.prototype.contains = function (value) {
   return false;
 };
 
+function ModelValidator (model) {
+  this.model = model;
+};
+
+ModelValidator.prototype.validateFile = function () {
+  let field = require(this.model.file)[this.model.collection];
+
+  if (typeof field == 'undefined') {
+    throw Error('Undefined JSON key: ' + this.model.collection);
+  }
+
+  if (!(field instanceof Array)) {
+    throw Error('"'+  this.model.collection + '" key must be an array.');
+  }
+};
+
+var JsonDB = function (file) {
+  this.file = file;
+};
+
+JsonDB.prototype.update = function (data) {
+  return fs.writeFileSync(this.file, JSON.stringify(data, null, '  '));
+};
+
+JsonDB.prototype.updateKey = function (key, value) {
+  let data = require(this.file);
+  data[key] = value;
+
+  return this.update(data);
+};
+
 /**
  * Model prototype
  *
- * @param {string} db
- * @param {string} collection
+ * @param {String} db
+ * @param {String} collection
  */
 function Model (db, collection) {
   this.file = db;
@@ -117,49 +156,38 @@ function Model (db, collection) {
 /**
  * Delete a record by a criteria
  *
- * @param {Object}|{integer} where
+ * @param {Object}|{Integer} where
  *
- * @return {boolean}
+ * @return {Boolean}
  */
 Model.prototype.deleteSync = function (where) {
-  this._checkFieldOnFile();
+  this._validateFile();
 
   let db = require(this.file);
+  let collection = db[this.collection]
 
   if (typeof where == 'object') {
     if (!Object.size(where)) {
-      db[this.collection] = [];
+      collection = [];
     } else {
       if (this._validateFields(where)) {
-        if (!db[this.collection].length) {
+        if (!collection.length) {
           return false;
         }
 
         let equals = [];
 
-        for (let k in db[this.collection]) {
-          if (db[this.collection].hasOwnProperty(k)) {
-            let e = [];
-
-            for (let i in where) {
-              if (where.hasOwnProperty(i)) {
-                if (db[this.collection][k][i] == where[i]) {
-                  e.push({equals: true, registry: k});
-                } else {
-                  e.push({equals: false});
-                }
-              }
+        for (let k in collection) {
+          if (collection.hasOwnProperty(k)) {
+            if (collection[k].propertiesEqualsTo(where)) {
+              equals.push(k);
             }
-
-            equals.push(e);
           }
         }
 
         for (let k in equals) {
           if (equals.hasOwnProperty(k)) {
-            if (equals[k].allValuesSameWithValue('equals', true)) {
-              db[this.collection].splice(equals[k].registry, 1);
-            }
+            collection.splice(equals[k], 1);
           }
         }
       }
@@ -167,8 +195,8 @@ Model.prototype.deleteSync = function (where) {
   } else {
     let index;
     
-    for (let k in db[this.collection]) {
-      if (db[this.collection][k].id == where) {
+    for (let k in collection) {
+      if (collection[k].id == where) {
         index = k;
       }
     }
@@ -177,7 +205,7 @@ Model.prototype.deleteSync = function (where) {
       return false;
     }
 
-    db[this.collection].splice(index, 1);
+    collection.splice(index, 1);
 
     return true;
   }
@@ -188,7 +216,7 @@ Model.prototype.deleteSync = function (where) {
 /**
  * Delete a record by a criteria
  *
- * @param {Object}|{integer} where
+ * @param {Object}|{Integer} where
  *
  * @return {Promise}
  */
@@ -207,16 +235,17 @@ Model.prototype.delete = function (where) {
  *
  * @param {Object} fields
  *
- * @return {boolean}
+ * @return {Boolean}
  */
 Model.prototype.addSync = function (fields) {
-  this._checkFieldOnFile();
+  this._validateFile();
   
   if (this._validateFields(fields)) {
-    let db = require.main.require(this.file);
-    let id = db[this.collection].length ? db[this.collection][db[this.collection].length - 1].id + 1 : 1;
-    db[this.collection].push({id: id}.merge(fields));
-    this._saveModifications(db);
+    let db = require(this.file);
+    let collection = db[this.collection];
+    let id = collection.length ? collection[collection.length - 1].id + 1 : 1;
+    collection.push({id: id}.merge(fields));
+    this._saveModificationOnKey(this.collection, collection);
 
     return true;
   }
@@ -246,22 +275,23 @@ Model.prototype.add = function (fields) {
 /**
  * Find a record by a criteria
  *
- * @param {Object}|{integer} where
- * @param {string}           order
+ * @param {Object}|{Integer} where
+ * @param {String}           order
  *
- * @return {boolean}
+ * @return {Boolean}
  */
 Model.prototype.findSync = function (where, order) {
-  this._checkFieldOnFile();
+  this._validateFile();
 
   let db = require(this.file);
+  let collection = db[this.collection];
   
   if (typeof where === 'object') {
     if (this._validateFields(where)) {
       let result = [];
       order = order ? order : 'desc';
 
-      if (!db[this.collection].length) {
+      if (!collection.length) {
         return false;
       }
 
@@ -271,30 +301,17 @@ Model.prototype.findSync = function (where, order) {
 
       let equals = [];
 
-      for (let k in db[this.collection]) {
-        if (db[this.collection].hasOwnProperty(k)) {
-          let e = {equals: [], registry: {}};
-
-          for (let i in where) {
-            if (where.hasOwnProperty(i)) {
-              if (db[this.collection][k][i] == where[i]) {
-                e.equals.push(true);
-                e['registry'] = db[this.collection][k];
-              } else {
-                e.equals.push(false);
-              }
-            }
+      for (let k in collection) {
+        if (collection.hasOwnProperty(k)) {
+          if (collection[k].propertiesEqualsTo(where)) {
+            equals.push(k);
           }
-
-          equals.push(e);
         }
       }
 
       for (let k in equals) {
         if (equals.hasOwnProperty(k)) {
-          if (equals[k].allValuesSameWithValue('equals', true)) {
-            result.push(equals[k].registry);
-          }
+          result.push(collection[equals[k]]);
         }
       }
 
@@ -308,10 +325,10 @@ Model.prototype.findSync = function (where, order) {
     }
   }
 
-  for (let k in db[this.collection]) {
-    if (db[this.collection].hasOwnProperty(k)) {
-      if (db[this.collection][k].id == where) {
-        return db[this.collection][k];
+  for (let k in collection) {
+    if (collection.hasOwnProperty(k)) {
+      if (collection[k].id == where) {
+        return collection[k];
       }
     }
   }
@@ -322,8 +339,8 @@ Model.prototype.findSync = function (where, order) {
 /**
  * Find a record by a criteria
  *
- * @param {Object}|{integer} where
- * @param {string}           order
+ * @param {Object}|{Integer} where
+ * @param {String}           order
  *
  * @return {Promise}
  */
@@ -343,30 +360,40 @@ Model.prototype.find = function (where, order) {
  * Update a record
  *
  * @param {Object}           data
- * @param {Object}|{integer} where
+ * @param {Object}|{Integer} where
  *
- * @return {boolean}|void
+ * @return {Boolean}|void
  */
 Model.prototype.setSync = function (data, where) {
-  this._checkFieldOnFile();
+  this._validateFile();
 
   if (this._validateFields(data) && this._validateFields(where)) {
     let db = require(this.file);
-    let result = this.get(where);
-    let registry = typeof result === 'object' ? result : result[0];
+    let collection = db[this.collection];
+    let result = this.findSync(where);
 
-    for (let k in data) {
-      registry[k] = data[k];
-    }
-
-    for (let k in db[this.collection]) {
-      if (parseInt(db[this.collection][k].id) == parseInt(registry.id)) {
-        db[this.collection][k] = registry;
-        this._saveModifications(db);
-
-        return true;
+    for (let k in result) {
+      if (result.hasOwnProperty(k)) {
+        for (let i in data) {
+          result[k][i] = data[i];
+        }
       }
     }
+
+    for (let k in collection) {
+      if (collection.hasOwnProperty(k)) {
+        for (let i in result) {
+          if (result.hasOwnProperty(i)) {
+            if (parseInt(collection[k].id) == parseInt(result[i].id)) {
+              collection[k] = result[i];
+            }
+          }
+        }
+      }
+    }
+
+    this._saveModificationOnKey(this.collection, collection);
+    return true
   }
 };
 
@@ -374,7 +401,7 @@ Model.prototype.setSync = function (data, where) {
  * Update a record
  *
  * @param {Object}           data
- * @param {Object}|{integer} where
+ * @param {Object}|{Integer} where
  *
  * @return {Promise}
  */
@@ -393,12 +420,12 @@ Model.prototype.set = function (data, where) {
 /**
  * Check if a record exists in database
  *
- * @param {Object}|{integer} where
+ * @param {Object}|{Integer} where
  *
- * @return {boolean}
+ * @return {Boolean}
  */
 Model.prototype.hasSync = function (where) {
-  this._checkFieldOnFile();
+  this._validateFile();
 
   if (this._validateFields(where)) {
     let db = require(this.file);
@@ -436,7 +463,7 @@ Model.prototype.hasSync = function (where) {
 /**
  * Check if a record exists in database
  *
- * @param {Object}|{integer} where
+ * @param {Object}|{Integer} where
  *
  * @return {Promise}
  */
@@ -461,7 +488,7 @@ Model.prototype.has = function (where) {
  * @return {Array}
  */
 Model.prototype.searchSync = function (where, opts) {
-  this._checkFieldOnFile();
+  this._validateFile();
 
   if (this._validateFields(where)) {
     opts = typeof opts === 'undefined' ? {} : opts;
@@ -476,8 +503,8 @@ Model.prototype.searchSync = function (where, opts) {
       let valids = [];
 
       for (let i in where) {
-        let r = opts['lowerCase'] ? db[this.collection][k][i].toLowerCase().search(where[i]) + 1 : db[this.collection][k][i].search(where[i]) + 1;
-        valids.push(r ? true : false);
+        let r = opts['lowerCase'] ? db[this.collection][k][i].toLowerCase().search(where[i]) : db[this.collection][k][i].search(where[i]);
+        valids.push(r + 1 ? true : false);
       }
 
       if (valids.allValuesSame(true)) {
@@ -512,12 +539,12 @@ Model.prototype.search = function (where, opts) {
 /**
  * Find all records
  *
- * @param {string} order
+ * @param {String} order
  *
  * @return {Array}
  */
 Model.prototype.findAllSync = function (order) {
-  this._checkFieldOnFile();
+  this._validateFile();
 
   order = order ? order : 'desc';
   let result = require(this.file)[this.collection];
@@ -533,7 +560,7 @@ Model.prototype.findAllSync = function (order) {
 /**
  * Find all records
  *
- * @param {string} order
+ * @param {String} order
  *
  * @return {Promise}
  */
@@ -554,7 +581,7 @@ Model.prototype.findAll = function (order) {
  *
  * @param {Object} fields
  *
- * @return {boolean}
+ * @return {Boolean}
  */
 Model.prototype._validateFields = function (fields) {
   if (typeof fields == 'object') {
@@ -585,20 +612,19 @@ Model.prototype._validateFields = function (fields) {
   return true;
 };
 
-Model.prototype._checkFieldOnFile = function () {
-  let field = require(this.file)[this.collection];
+Model.prototype._validateFile = function () {
+  let validator = new ModelValidator(this);
+  return validator.validateFile();
+}
 
-  if (typeof field == 'undefined') {
-    throw Error('Undefined JSON key: ' + this.collection);
-  }
-
-  if (!(field instanceof Array)) {
-    throw Error('"'+  this.collection + '" key must be an array.');
-  }
+Model.prototype._saveModifications = function (data) {
+  let json = new JsonDB(this.file);
+  json.update(data);
 };
 
-Model.prototype._saveModifications = function (db) {
-  fs.writeFileSync(this.file, JSON.stringify(db, null, '  '));
-};
+Model.prototype._saveModificationOnKey = function (key, data) {
+  let json = new JsonDB(this.file);
+  json.updateKey(key, data);
+}
 
 module.exports = Model;

@@ -1,6 +1,6 @@
 jatabase
 =========
-JSON file database with JavaScript.
+This is advisable when you need a local simple database without any security -- is a JSON file.
 
 **Status**: Development
 
