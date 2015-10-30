@@ -129,7 +129,7 @@ Model.prototype.findSync = function (where, order) {
 };
 
 /**
- * Find a record by a criteria
+ * Find records by a criteria
  *
  * @param {Object}|{Integer} where
  * @param {String}           order
@@ -142,6 +142,38 @@ Model.prototype.find = function (where, order) {
   return new Promise(function (resolve, reject) {
     try {
       resolve(that.findSync(where, order));
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+/**
+ * Find one record by a criteria
+ *
+ * @param {Òbject}|{Integer} where
+ *
+ * @return {Object}
+ */
+Model.prototype.findOneSync = function (where) {
+  let all = this.findSync(where);
+  
+  return all != false ? all[0] : false;
+}
+
+/**
+ * Find one record by a criteria
+ *
+ * @param {Òbject}|{Integer} where
+ *
+ * @return {Object}
+ */
+Model.prototype.findOne = function (where) {
+  let that = this;
+
+  return new Promise(function (resolve, reject) {
+    try {
+      resolve(that.findOneSync(where));
     } catch (err) {
       reject(err);
     }
