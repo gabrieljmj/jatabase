@@ -66,7 +66,7 @@ productsModel.add({name: 'Pear TV', price: 1280.00, categories: ['TV'], decripti
 productsModel.addSync({name: 'Pear TV', price: 2400.00, categories: ['TV'], decription: 'Just a TV'});
 ```
 
-### Find/Find all
+### Find/Find one/Find all
 
 #### Async way
 ```js
