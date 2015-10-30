@@ -13,8 +13,9 @@ $ npm install jatabase --save
 All the persistence methods use promises, so they have an async way of using and a sync way.
 
 * [Creating models](#creating-models) 
+* [Field types](#field-types)
 * [Add](#add)
-* [Find/Find all](#findfind-all)
+* [Find/Find one/Find all](#findfind-onefind-all)
 * [Delete](#delete)
 * [Update](#update)
 * [Search](#search)
@@ -79,6 +80,17 @@ productsModel.find({price: 2400.00}).then(function (product) {
     // ...
 });
 
+// Find one
+// Using ID
+productsModel.findOne(3).then(function (product) {
+    // ...
+});
+
+// Using price
+productsModel.findOne({price: 2400.00}).then(function (product) {
+    // ...
+});
+
 // Find all
 productsModel.findAll().then(function (products) {
     // ...
@@ -92,6 +104,13 @@ var product = productsModel.findSync(3);
 
 // Using price
 var product = productsModel.findSync({price: 2400.00});
+
+// Find one
+// Using ID
+var product = productsModel.findOneSync(3);
+
+// Using price
+var product = productsModel.findOneSync({price: 2400.00});
 
 // Find all
 var products = productsModel.findAllSync();
