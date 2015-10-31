@@ -159,7 +159,7 @@ Model.prototype.findOneSync = function (where) {
   let all = this.findSync(where);
   
   return all != false ? all[0] : false;
-}
+};
 
 /**
  * Find one record by a criteria
@@ -340,8 +340,8 @@ Model.prototype._validateFields = function (fields) {
             throw 'Unknown field in model ' + this.collection + ': ' + field + '.';
           }
         } else {
-          let type = this.fields[field].type.toString().toLowerCase();
-          let fieldValidators = require('./field_validators');
+          let type = this.fields[field].type.toString().toLowerCase(),
+            fieldValidators = require('./field_validators');
 
           if (typeof fieldValidators.type[type] == 'undefined') {
             throw Error('"' + type + '" is an invalid field type.');
@@ -363,7 +363,7 @@ Model.prototype._validateFields = function (fields) {
 Model.prototype._validateFile = function () {
   let validator = new ModelValidator(this);
   return validator.validateFile();
-}
+};
 
 Model.prototype._saveModifications = function (data) {
   let json = new JsonDB(this.file);
@@ -373,6 +373,6 @@ Model.prototype._saveModifications = function (data) {
 Model.prototype._saveModificationOnKey = function (key, data) {
   let json = new JsonDB(this.file);
   json.updateKey(key, data);
-}
+};
 
 module.exports = Model;

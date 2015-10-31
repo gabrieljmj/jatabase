@@ -12,8 +12,8 @@ var utils = require('../utils');
 
 module.exports = function (Model) {
   return function (where) {
-    let db = require(Model.file);
-    let collection = db[Model.collection]
+    let db = require(Model.file),
+      collection = db[Model.collection];
 
     if (typeof where == 'object') {
       if (!utils.object.size(where)) {
