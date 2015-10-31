@@ -34,11 +34,17 @@ module.exports = function (Model) {
             }
           }
 
-          for (let k in equals) {
-            if (equals.hasOwnProperty(k)) {
-              collection.splice(equals[k], 1);
+          let newCollection = [];
+
+          for (let k in collection) {
+            if (collection.hasOwnProperty(k)) {
+              if (!utils.array.contains(equals, k)) {
+                newCollection.push(collection[k]);
+              }
             }
           }
+
+          collection = newCollection;
         }
       }
     } else {

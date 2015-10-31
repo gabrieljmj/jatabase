@@ -100,9 +100,9 @@ module.exports = {
     },
 
     propertiesEqualsTo: function (obj1, obj2) {
-      for (var k in object) {
-        if (object.hasOwnProperty(k)) {
-          if (typeof obj1[k] == 'undefined' || obj1[k] != object[k]) {
+      for (var k in obj2) {
+        if (obj2.hasOwnProperty(k)) {
+          if (typeof obj1[k] == 'undefined' || obj1[k] != obj2[k]) {
             return false;
           }
         }
