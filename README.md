@@ -2,7 +2,7 @@ jatabase
 =========
 ![](https://img.shields.io/badge/status-development-red.svg) ![](https://img.shields.io/npm/v/jatabase.svg)
 
-This is advisable when you need a local simple database without any security -- is a JSON file.
+This is advisable when you need a local simple database without any security -- is a JSON file. **jatabase** was created for a desktop application using [electron](http://electron.atom.io/), so, is also ideal for desktop application.
 
 ## Installing
 ```console
