@@ -61,10 +61,9 @@ module.exports = function (Model) {
       }
 
       collection.splice(index, 1);
-
-      return true;
     }
 
     Model._saveModificationOnKey(Model.collection, collection);
+    return false;
   }
 };
