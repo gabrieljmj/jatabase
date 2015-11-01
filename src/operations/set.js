@@ -36,7 +36,6 @@ module.exports = function (Model) {
       }
 
       Model._saveModificationOnKey(Model.collection, collection);
-      return true
     }
   }
 };

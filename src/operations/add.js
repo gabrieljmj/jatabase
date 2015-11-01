@@ -18,10 +18,6 @@ module.exports = function (Model) {
         id = collection.length ? collection[collection.length - 1].id + 1 : 1;
       collection.push(utils.object.merge({id: id}, fields));
       Model._saveModificationOnKey(Model.collection, collection);
-
-      return true;
     }
-
-    return false;
   }
 };
