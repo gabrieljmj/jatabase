@@ -8,9 +8,12 @@
 
 'use strict';
 
-var model = require('./model');
+var model = require('./model'),
+  fs = require('fs'),
+  path = require('path'),
+  Context = require('./context');
 
-var jatabase = function (file) {
+let jatabase = function (file) {
   this.file = file;
 };
 
@@ -23,15 +26,34 @@ var jatabase = function (file) {
  * @return {Model}
  */
 jatabase.prototype.createModel = function (collection, fields) {
-  var newModel = function (db, collection) {
+  let newModel = function (db, collection, _fields, context) {
     this.file = db;
     this.collection = collection;
-    this.fields = fields;
+    this.fields = _fields;
+    this.context = context;
   };
 
   newModel.prototype = new model;
 
-  return new newModel(this.file, collection);
+  return new newModel(this.file, collection, fields, createContext(this.file));
+};
+
+let createContext = function (file) {
+    let dir = path.dirname(file),
+      fileName = path.basename(file, '.json'),
+      contextFile = dir + '/.' + fileName + '.context.json';
+
+    fs.stat(contextFile, function(err, stat) {
+      if (err != null && err.code == 'ENOENT') {
+        fs.writeFile(contextFile, JSON.stringify({users: []}), function (err) {
+          if (err !== null) {
+            console.error(err);
+          }
+        });
+      }
+    });
+
+    return new Context(contextFile);
 };
 
 module.exports = jatabase;

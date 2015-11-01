@@ -1,13 +1,15 @@
 jatabase
 =========
-This is advisable when you need a local simple database without any security -- is a JSON file.
+![](https://img.shields.io/badge/status-development-red.svg) ![](https://img.shields.io/npm/v/jatabase.svg)
 
-**Status**: Development
+This is advisable when you need a local simple database without any security -- is a JSON file.
 
 ## Installing
 ```console
 $ npm install jatabase --save
 ```
+
+![](https://nodei.co/npm/jatabase.png?downloads=true&downloadRank=true&stars=true)
 
 ## Usage
 All the persistence methods use promises, so they have an async way of using and a sync way.
@@ -211,3 +213,6 @@ productsModel.has(5);
 // Using another fields
 productsModel.has({name: 'Pear TV'});
 ```
+
+# License
+[MIT License](https://github.com/gabrieljmj/jatabase/blob/dev/LICENSE.md) 2015 © Gabriel Jacinto.

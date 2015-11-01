@@ -2,3 +2,4 @@ node_modules/
 npm-debug.log
 test*
 src/model_class.js
+.test.context.json

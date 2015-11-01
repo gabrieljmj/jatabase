@@ -9,7 +9,7 @@
 'use strict';
 
 var fs = require('fs'),
-  JsonDB = require('./jsondb'),
+  _json = require('./_json'),
   utils = require('./utils');
 
 var ModelValidator = function (model) {
@@ -38,10 +38,11 @@ var operation = function (operation) {
  * @param {String} db
  * @param {String} collection
  */
-function Model (db, collection) {
+function Model (db, collection, fields, context) {
   this.file = db;
   this.collection = collection;
-  this.fields;
+  this.fields = fields;
+  this.context = context;
 };
 
 /**
@@ -366,12 +367,12 @@ Model.prototype._validateFile = function () {
 };
 
 Model.prototype._saveModifications = function (data) {
-  let json = new JsonDB(this.file);
+  let json = new _json(this.file);
   json.update(data);
 };
 
 Model.prototype._saveModificationOnKey = function (key, data) {
-  let json = new JsonDB(this.file);
+  let json = new _json(this.file);
   json.updateKey(key, data);
 };
 

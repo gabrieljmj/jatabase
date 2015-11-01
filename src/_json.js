@@ -10,21 +10,21 @@
 
 var fs = require('fs');
 
-var JsonDB = function (file) {
+var _Json = function (file) {
   validateFile(file);
 
   this.file = file;
 };
 
-JsonDB.prototype.update = function (data) {
-  return fs.writeFile(this.file, JSON.stringify(data, null, '  '), 'utf8', function (err) {
+_Json.prototype.update = function (data) {
+  return fs.writeFile(this.file, JSON.stringify(data), 'utf8', function (err) {
     if (err != null) {
       throw Error(err);
     }
   });
 };
 
-JsonDB.prototype.updateKey = function (key, value) {
+_Json.prototype.updateKey = function (key, value) {
   let data = require(this.file);
   data[key] = value;
 
@@ -45,4 +45,4 @@ let validateFile = function (file) {
   });
 };
 
-module.exports = JsonDB;
+module.exports = _Json;
