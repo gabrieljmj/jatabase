@@ -12,35 +12,47 @@ var utils = require('../utils');
 
 module.exports = function (Model) {
   return function (where) {
-    if (Model._validateFields(where)) {
-      let db = require(Model.file),
-        collection = db[Model.collection];
+    let db = require(Model.file),
+          collection = db[Model.collection];
+          
+    if (typeof where == 'object') {
+      if (Model._validateFields(where)) {
+        if (!collection.length) {
+          return false;
+        }
 
-      if (!collection.length) {
-        return false;
-      }
+        let equals = [];
 
-      let equals = [];
+        for (let k in collection) {
+          let e = [];
 
-      for (let k in collection) {
-        let e = [];
+          for (let i in where) {
+            if (where.hasOwnProperty(i)) {
+              e.push(collection[k][i] == where[i] ? true : false);
+            }
+          }
 
-        for (let i in where) {
-          if (where.hasOwnProperty(i)) {
-            e.push(collection[k][i] == where[i] ? true : false);
+          equals.push(e);
+        }
+
+        for (let k in equals) {
+          if (utils.array.allValuesSame(equals[k], true)) {
+            return true;
           }
         }
 
-        equals.push(e);
+        return false;
       }
+    }
 
-      for (let k in equals) {
-        if (utils.array.allValuesSame(equals[k], true)) {
+    for (let k in collection) {
+      if (collection.hasOwnProperty(k)) {
+        if (collection[k].id == where) {
           return true;
         }
       }
-
-      return false;
     }
+
+    return false;
   }
 };

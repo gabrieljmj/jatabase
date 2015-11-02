@@ -123,7 +123,7 @@ Model.prototype.add = function (fields) {
 Model.prototype.findSync = function (where, order) {
   this._validateFile();
 
-  let find = operation('./operations/find'),
+  let find = operation('find'),
     findFn = find(this);
 
   return findFn(where, order);

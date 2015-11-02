@@ -64,6 +64,8 @@ let getContextFromCollection = function (Context, from, create) {
  * @param {String} file
  */
 let validateFile = function (file) {
+  let fileParts = file.split('.');
+
   if (fileParts[fileParts.length - 1].toLowerCase() != 'json') {
     throw Error('File must have .json extension.');
   }

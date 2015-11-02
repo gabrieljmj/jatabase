@@ -56,7 +56,8 @@ module.exports = function (Model) {
 
     for (let k in collection) {
       if (collection.hasOwnProperty(k)) {
-        if (collection[k].id == where) {
+
+        if (collection[k].id === where) {
           return collection[k];
         }
       }

@@ -57,7 +57,7 @@ module.exports = function (Model) {
       }
 
       if (typeof index === 'undefined') {
-        throw Error('Record with ID "' + where + '" was not found');
+        throw new Error('Record with ID "' + where + '" was not found');
       }
 
       collection.splice(index, 1);
