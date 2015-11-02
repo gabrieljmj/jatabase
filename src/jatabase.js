@@ -35,17 +35,17 @@ jatabase.prototype.createModel = function (collection, fields) {
 
   newModel.prototype = new model;
 
-  return new newModel(this.file, collection, fields, createContext(this.file));
+  return new newModel(this.file, collection, fields, createContext(this.file, collection));
 };
 
-let createContext = function (file) {
+let createContext = function (file, model) {
     let dir = path.dirname(file),
       fileName = path.basename(file, '.json'),
       contextFile = dir + '/.' + fileName + '.context.json';
 
     fs.stat(contextFile, function(err, stat) {
       if (err != null && err.code == 'ENOENT') {
-        fs.writeFile(contextFile, JSON.stringify({users: []}), function (err) {
+        fs.writeFile(contextFile, JSON.stringify({'' + model + '': []}), function (err) {
           if (err !== null) {
             console.error(err);
           }
