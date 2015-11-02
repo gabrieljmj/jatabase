@@ -45,7 +45,9 @@ let createContext = function (file, model) {
 
     fs.stat(contextFile, function(err, stat) {
       if (err != null && err.code == 'ENOENT') {
-        fs.writeFile(contextFile, JSON.stringify({'' + model + '': []}), function (err) {
+        let obj = {};
+        obj[model] = [];
+        fs.writeFile(contextFile, JSON.stringify(obj), function (err) {
           if (err !== null) {
             console.error(err);
           }
