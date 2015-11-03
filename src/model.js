@@ -8,11 +8,11 @@
 
 'use strict';
 
-var fs = require('fs'),
+const fs = require('fs'),
   _json = require('./_json'),
   utils = require('./utils');
 
-var ModelValidator = function (model) {
+const ModelValidator = function (model) {
   this.model = model;
 };
 
@@ -28,7 +28,7 @@ ModelValidator.prototype.validateFile = function () {
   }
 };
 
-var operation = function (operation) {
+const operation = function (operation) {
   return require('./operations/' + operation);
 };
 
@@ -38,7 +38,7 @@ var operation = function (operation) {
  * @param {String} db
  * @param {String} collection
  */
-function Model (db, collection, fields, context) {
+const Model = function (db, collection, fields, context) {
   this.file = db;
   this.collection = collection;
   this.fields = fields;
@@ -342,7 +342,7 @@ Model.prototype._validateFields = function (fields) {
           }
         } else {
           let type = this.fields[field].type.toString().toLowerCase(),
-            fieldValidators = require('./field_validators');
+            fieldValidators = require('./field.validators');
 
           if (typeof fieldValidators.type[type] == 'undefined') {
             throw Error('"' + type + '" is an invalid field type.');

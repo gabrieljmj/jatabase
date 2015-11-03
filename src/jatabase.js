@@ -8,12 +8,12 @@
 
 'use strict';
 
-var model = require('./model'),
+const model = require('./model'),
   fs = require('fs'),
   path = require('path'),
   Context = require('./context');
 
-let jatabase = function (file) {
+const jatabase = function (file) {
   this.file = file;
 };
 

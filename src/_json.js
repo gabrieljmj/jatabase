@@ -8,9 +8,10 @@
 
 'use strict';
 
-var fs = require('fs');
+const fs = require('fs'),
+  validateFile = require('./file.validator');
 
-var _Json = function (file) {
+const _Json = function (file) {
   validateFile(file);
 
   this.file = file;
@@ -29,20 +30,6 @@ _Json.prototype.updateKey = function (key, value) {
   data[key] = value;
 
   return this.update(data);
-};
-
-let validateFile = function (file) {
-  let fileParts = file.split('.');
-
-  if (fileParts[fileParts.length - 1].toLowerCase() != 'json') {
-    throw Error('File must have .json extension.');
-  }
-
-  fs.stat(file, function(err, stat) {
-    if (err != null && err.code == 'ENOENT') {
-      throw Error('File does not exists: ' + file);
-    }
-  });
 };
 
 module.exports = _Json;

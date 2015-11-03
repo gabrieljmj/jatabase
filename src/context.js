@@ -9,7 +9,8 @@
 'use strict';
 
 var _json = require('./_json'),
-  fs = require('fs');
+  fs = require('fs'),
+  validateFile = require('./file.validator');
 
 let Context = function (file) {
   validateFile(file);
@@ -56,25 +57,6 @@ let getContextFromCollection = function (Context, from, create) {
   }
 
   return context[from];
-};
-
-/**
- * Verify if the file exists and if is a JSON
- *
- * @param {String} file
- */
-let validateFile = function (file) {
-  let fileParts = file.split('.');
-
-  if (fileParts[fileParts.length - 1].toLowerCase() != 'json') {
-    throw Error('File must have .json extension.');
-  }
-
-  fs.stat(file, function(err, stat) {
-    if (err != null && err.code == 'ENOENT') {
-      throw Error('File does not exists: ' + file);
-    }
-  });
 };
 
 module.exports = Context;

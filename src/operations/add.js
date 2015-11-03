@@ -8,7 +8,7 @@
 
 'use strict';
 
-var utils = require('../utils');
+const utils = require('../utils');
 
 module.exports = function (Model) {
   return function (fields) {
