@@ -19,9 +19,6 @@
     "url": "https://github.com/GabrielJMJ/jatabase/issues"
   },
   "dependencies": {
-    "chai": "^3.4.0",
-    "promise": "^7.0.4",
-    "steno": "^0.4.2"
   },
   "licenses": [
     {
