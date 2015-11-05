@@ -4,10 +4,10 @@ const assert = require('assert'),
       expect = require('chai').expect,
       fs = require('fs'),
       file = {
-        unchangeble: __dirname + '/db.unchangeble.json',
-        changeble_delete: __dirname + '/db.changeble.del.json',
-        changeble_add: __dirname + '/db.changeble.add.json',
-        changeble_set: __dirname + '/db.changeble.set.json'
+        unchangeable: __dirname + '/db.unchangeable.json',
+        changeable_delete: __dirname + '/db.changeable.del.json',
+        changeable_add: __dirname + '/db.changeable.add.json',
+        changeable_set: __dirname + '/db.changeable.set.json'
       },
       Jatabase = require('../src/jatabase'),
       restore = function (file) {
@@ -30,16 +30,16 @@ const assert = require('assert'),
 describe('Jatabase tests', function () {
   describe('#deleteSync()', function () {
     afterEach(function () {
-      restore(file.changeble_delete);
+      restore(file.changeable_delete);
     });
 
     it('should delete a record by it id', function () {
-      let jb = new Jatabase(file.changeble_delete);
+      let jb = new Jatabase(file.changeable_delete);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       model.deleteSync(2);
 
-      let now = require(file.changeble_delete),
+      let now = require(file.changeable_delete),
           expected = {cities: [
             {id: 1, name: 'Sao Paulo'},
             {id: 3, name: 'New York'}
@@ -49,12 +49,12 @@ describe('Jatabase tests', function () {
     });
 
     it('should delete a record by a field', function () {
-      let jb = new Jatabase(file.changeble_delete);
+      let jb = new Jatabase(file.changeable_delete);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       model.deleteSync({name: 'New York'});
 
-      let now = require(file.changeble_delete),
+      let now = require(file.changeable_delete),
           expected = {cities: [
             {id: 1, name: 'Sao Paulo'},
             {id: 2, name: 'Rio de Janeiro'}
@@ -63,7 +63,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should throw a exception when a invalid record ID is passed', function () {
-      let jb = new Jatabase(file.changeble_delete);
+      let jb = new Jatabase(file.changeable_delete);
       let model = jb.createModel('cities', {name: {type: 'string'}});
       expect(model.deleteSync.bind(model, 5)).to.throw('Record with ID "5" was not found');
     });
@@ -71,16 +71,16 @@ describe('Jatabase tests', function () {
 
   describe('#addSync()', function () {
     afterEach(function () {
-      restore(file.changeble_add);
+      restore(file.changeable_add);
     });
 
     it('should add without errors', function () {
-      let jb = new Jatabase(file.changeble_add);
+      let jb = new Jatabase(file.changeable_add);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       model.deleteSync({name: 'Londres'});
 
-      let now = require(file.changeble_add),
+      let now = require(file.changeable_add),
           expected = {cities: [
             {id: 1, name: 'Sao Paulo'},
             {id: 2, name: 'Rio de Janeiro'},
@@ -94,7 +94,7 @@ describe('Jatabase tests', function () {
 
   describe('#findSync()', function () {
     it('should find record by id', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = {id: 1, name: 'Sao Paulo'},
           given = model.findSync(1);
@@ -103,7 +103,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should find record by fields', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = {id: 1, name: 'Sao Paulo'},
           given = model.findSync({name: 'Sao Paulo'});
@@ -112,7 +112,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return false when record searched by id does not exists', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = false,
           given = model.findSync(5);
@@ -121,7 +121,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return false when record searched by fields does not exists', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = false,
           given = model.findSync({name: 'Invalid city'});
@@ -130,9 +130,9 @@ describe('Jatabase tests', function () {
     });
 
     it('should return all records when a empty object is passed', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
-          expected = require(file.unchangeble),
+          expected = require(file.unchangeable),
           given = model.findSync({});
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
@@ -141,27 +141,27 @@ describe('Jatabase tests', function () {
 
   describe('#findAllSync', function () {
     it('should return all records', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
-          expected = require(file.unchangeble).cities,
+          expected = require(file.unchangeable).cities,
           given = model.findAllSync();
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
     });
 
     it('should return all records desc sorted', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
-          expected = require(file.unchangeble).cities.reverse(),
+          expected = require(file.unchangeable).cities.reverse(),
           given = model.findAllSync('desc');
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
     });
 
     it('should return all records asc sorted', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
-          expected = require(file.unchangeble).cities,
+          expected = require(file.unchangeable).cities,
           given = model.findAllSync('asc');
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
@@ -170,7 +170,7 @@ describe('Jatabase tests', function () {
 
   describe('#has()', function () {
     it('should return true for existent record by id', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = true,
           given = model.hasSync(1);
@@ -179,7 +179,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return true for existent record by fields', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = true,
           given = model.hasSync({name: 'Sao Paulo'});
@@ -188,7 +188,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return false for inexistent record by id', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = false,
           given = model.hasSync(17);
@@ -197,7 +197,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return false for inexistent record by fields', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}}),
           expected = false,
           given = model.hasSync({name: 'Invalid city'});
@@ -208,11 +208,11 @@ describe('Jatabase tests', function () {
 
   describe('#setSync()', function () {
     afterEach(function () {
-      restore(file.changeble_set);
+      restore(file.changeable_set);
     });
 
     it('should set by ID without errors', function () {
-      let jb = new Jatabase(file.changeble_set);
+      let jb = new Jatabase(file.changeable_set);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       model.setSync({name: 'Los Angeles'}, 3);
@@ -222,13 +222,13 @@ describe('Jatabase tests', function () {
           {id: 2, name: 'Rio de Janeiro'},
           {id: 3, name: 'Los Angeles'}
         ]},
-        given = require(file.changeble_set);
+        given = require(file.changeable_set);
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
     });
 
     it('should set by fields without errors', function () {
-      let jb = new Jatabase(file.changeble_set);
+      let jb = new Jatabase(file.changeable_set);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       model.setSync({name: 'Dubai'}, {name: 'Rio de Janeiro'});
@@ -238,7 +238,7 @@ describe('Jatabase tests', function () {
           {id: 2, name: 'Dubai'},
           {id: 3, name: 'Los Angeles'}
         ]},
-        given = require(file.changeble_set);
+        given = require(file.changeable_set);
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
     });
@@ -246,7 +246,7 @@ describe('Jatabase tests', function () {
 
   describe('#searchSync()', function () {
     it('should return the only one expected', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       let expected = [
@@ -262,7 +262,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return all expected', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       let expected = [
@@ -281,7 +281,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return false with case sentitive on', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       let given = model.searchSync({name: 'sao'});
@@ -290,7 +290,7 @@ describe('Jatabase tests', function () {
     });
 
     it('should return all expected with case sentitive off', function () {
-      let jb = new Jatabase(file.unchangeble);
+      let jb = new Jatabase(file.unchangeable);
       let model = jb.createModel('cities', {name: {type: 'string'}});
 
       let expected = [
