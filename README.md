@@ -1,6 +1,6 @@
 jatabase
 =========
-![](https://img.shields.io/badge/status-development-red.svg) ![](https://img.shields.io/npm/v/jatabase.svg)
+![](https://img.shields.io/badge/status-development-red.svg) ![](https://img.shields.io/npm/v/jatabase.svg) [![Build Status](https://travis-ci.org/gabrieljmj/jatabase.svg?branch=dev)](https://travis-ci.org/gabrieljmj/jatabase)
 
 This is advisable when you need a local simple database without any security -- is a JSON file. **jatabase** was created for a desktop application using [electron](http://electron.atom.io/), so, is also ideal for desktop application.
 
