@@ -12,18 +12,22 @@
   },
   "author": "Gabriel Jacinto <gamjj74@hotmail.com>",
   "devDependencies": {
-    "nodeunit": "0.9.x"
+    "chai": "^3.4.0",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.1.3"
   },
   "main": "./src/jatabase.js",
   "bugs": {
     "url": "https://github.com/GabrielJMJ/jatabase/issues"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "licenses": [
     {
       "type": "MIT",
       "url": "http://www.opensource.org/licenses/MIT"
     }
-  ]
+  ],
+  "scripts": {
+    "test": "mocha"
+  }
 }

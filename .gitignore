@@ -1,5 +1,6 @@
 node_modules/
+docs/
+test.js*
+test/.*
 npm-debug.log
-test*
 src/model_class.js
-.test.context.json

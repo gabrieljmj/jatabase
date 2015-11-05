@@ -8,6 +8,8 @@
 
 'use strict';
 
+const utils = require('../utils');
+
 module.exports = function (Model) {
   return function (where, opts) {
     if (Model._validateFields(where)) {

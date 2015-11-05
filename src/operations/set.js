@@ -15,21 +15,35 @@ module.exports = function (Model) {
         collection = db[Model.collection],
         result = Model.findSync(where);
 
-      for (let k in result) {
-        if (result.hasOwnProperty(k)) {
-          for (let i in data) {
-            result[k][i] = data[i];
+      if (typeof where == 'object') {
+        for (let k in result) {
+          if (result.hasOwnProperty(k)) {
+            for (let i in data) {
+              result[k][i] = data[i];
+            }
           }
         }
-      }
 
-      for (let k in collection) {
-        if (collection.hasOwnProperty(k)) {
-          for (let i in result) {
-            if (result.hasOwnProperty(i)) {
-              if (parseInt(collection[k].id) == parseInt(result[i].id)) {
-                collection[k] = result[i];
+        for (let k in collection) {
+          if (collection.hasOwnProperty(k)) {
+            for (let i in result) {
+              if (result.hasOwnProperty(i)) {
+                if (parseInt(collection[k].id) == parseInt(result[i].id)) {
+                  collection[k] = result[i];
+                }
               }
+            }
+          }
+        }
+      } else {
+        for (let i in data) {
+          result[i] = data[i];
+        }
+
+        for (let k in collection) {
+          if (collection.hasOwnProperty(k)) {
+            if (parseInt(collection[k].id) == parseInt(result.id)) {
+              collection[k] = result;
             }
           }
         }

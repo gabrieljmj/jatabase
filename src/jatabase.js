@@ -13,7 +13,7 @@ const model = require('./model'),
   path = require('path'),
   Context = require('./context');
 
-const jatabase = function (file) {
+var jatabase = function (file) {
   this.file = file;
 };
 
