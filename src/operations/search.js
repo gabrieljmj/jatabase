@@ -8,10 +8,13 @@
 
 'use strict';
 
-const utils = require('../utils');
+const utils = require('../utils'),
+  filter = require('./filters/filters');
 
 module.exports = function (Model) {
   return function (where, opts) {
+    where = typeof where == 'undefined' || where === null ? {} : where;
+    
     if (Model._validateFields(where)) {
       opts = typeof opts === 'undefined' ? {} : opts;
       let db = require(Model.file),
@@ -32,6 +35,8 @@ module.exports = function (Model) {
             valids.push(r + 1 ? true : false);
           }
         }
+
+        collection[k] = filter(Model, collection[k]);
 
         if (utils.array.allValuesSame(valids, true)) {
           result.push(collection[k]);

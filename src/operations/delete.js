@@ -14,6 +14,7 @@ module.exports = function (Model) {
   return function (where) {
     let db = require(Model.file),
       collection = db[Model.collection];
+    where = typeof where == 'undefined' || where === null ? {} : where;
 
     if (typeof where == 'object') {
       if (!utils.object.size(where)) {

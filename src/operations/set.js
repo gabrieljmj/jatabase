@@ -10,6 +10,12 @@
 
 module.exports = function (Model) {
   return function (data, where) {
+    if (typeof data != 'object') {
+      throw new Error('You have to indicate the data to update.');
+    }
+
+    where = typeof where == 'undefined' || where === null ? {} : where;
+
     if (Model._validateFields(data) && Model._validateFields(where)) {
       let db = require(Model.file),
         collection = db[Model.collection],

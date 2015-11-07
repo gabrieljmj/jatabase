@@ -8,12 +8,14 @@
 
 'use strict';
 
-const utils = require('../utils');
+const utils = require('../utils'),
+  filter = require('./filters/filters');
 
 module.exports = function (Model) {
   return function (where, order) {
     let db = require(Model.file),
       collection = db[Model.collection];
+    where = typeof where == 'undefined' || where === null ? {} : where;
     
     if (typeof where === 'object') {
       if (Model._validateFields(where)) {
@@ -50,6 +52,12 @@ module.exports = function (Model) {
           result.reverse();
         }
 
+        for (let k in result) {
+          if (result.hasOwnProperty(k)) {
+            result[k] = filter(Model, result[k]);
+          }
+        }
+
         return result.length ? result : false;
       }
     }
@@ -57,6 +65,8 @@ module.exports = function (Model) {
     for (let k in collection) {
       if (collection.hasOwnProperty(k)) {
         if (collection[k].id === where) {
+          collection[k] = filter(Model, collection[k]);
+
           return collection[k];
         }
       }

@@ -21,6 +21,9 @@ module.exports = {
     },
     object: function (value) {
       return typeof value == 'object';
+    },
+    date: function (value) {
+      return value instanceof Date;
     }
   }
 };

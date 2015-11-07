@@ -43,19 +43,15 @@ let createContext = function (file, model) {
       fileName = path.basename(file, '.json'),
       contextFile = dir + '/.' + fileName + '.context.json';
 
-    fs.stat(contextFile, function(err, stat) {
-      if (err != null && err.code == 'ENOENT') {
-        let obj = {};
-        obj[model] = [];
-        fs.writeFile(contextFile, JSON.stringify(obj), function (err) {
-          if (err !== null) {
-            console.error(err);
-          }
-        });
-      }
-    });
+  try {
+    require(contextFile);
+  } catch (e) {
+    let obj = {};
+    obj[model] = [];console.log(JSON.stringify(obj));
+    fs.writeFileSync(contextFile, JSON.stringify(obj));
+  }
 
-    return new Context(contextFile);
+  return new Context(contextFile);
 };
 
 module.exports = jatabase;
