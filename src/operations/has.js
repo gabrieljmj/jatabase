@@ -8,12 +8,14 @@
 
 'use strict';
 
-const utils = require('../utils');
+const utils = require('../utils'),
+  whereClause = require('./clause/where');
 
 module.exports = function (Model) {
   return function (where) {
     let db = require(Model.file),
-          collection = db[Model.collection];
+          collection = db[Model.collection],
+          _whereClause = whereClause(Model);
     where = typeof where == 'undefined' || where === null ? {} : where;
           
     if (typeof where == 'object') {
@@ -22,27 +24,7 @@ module.exports = function (Model) {
           return false;
         }
 
-        let equals = [];
-
-        for (let k in collection) {
-          let e = [];
-
-          for (let i in where) {
-            if (where.hasOwnProperty(i)) {
-              e.push(collection[k][i] == where[i] ? true : false);
-            }
-          }
-
-          equals.push(e);
-        }
-
-        for (let k in equals) {
-          if (utils.array.allValuesSame(equals[k], true)) {
-            return true;
-          }
-        }
-
-        return false;
+        return !!_whereClause(where).length;
       }
     }
 

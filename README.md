@@ -41,6 +41,9 @@ var Jatabase = require('jatabase'),
       },
       description: {
         type: 'string'
+      },
+      created_at: {
+        type: 'date'
       }
     })
   };
@@ -53,12 +56,13 @@ module.exports = models;
 * ```number```
 * ```array```
 * ```object```
+* ```date``` Returns a Date object
 
 ### Add
 
 #### Async way
 ```js
-productsModel.add({name: 'Pear TV', price: 1280.00, categories: ['TV'], decription: 'Just a TV'}).then(function (success) {
+productsModel.add({name: 'Pear TV', price: 1280.00, categories: ['TV'], decription: 'Just a TV', created_at: new Date()}).then(function (success) {
     // ...
 });
 ```

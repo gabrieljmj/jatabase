@@ -8,12 +8,14 @@
 
 'use strict';
 
-const utils = require('../utils');
+const utils = require('../utils'),
+  whereClause = require('./clause/where');
 
 module.exports = function (Model) {
   return function (where) {
     let db = require(Model.file),
-      collection = db[Model.collection];
+      collection = db[Model.collection],
+      _whereClause = whereClause(Model);
     where = typeof where == 'undefined' || where === null ? {} : where;
 
     if (typeof where == 'object') {
@@ -25,21 +27,14 @@ module.exports = function (Model) {
             return false;
           }
 
-          let equals = [];
+          let toDelete = _whereClause(where).map(function (record, key) {
+            return key;
+          }),
+            newCollection = [];
 
           for (let k in collection) {
             if (collection.hasOwnProperty(k)) {
-              if (utils.object.propertiesEqualsTo(collection[k], where)) {
-                equals.push(k);
-              }
-            }
-          }
-
-          let newCollection = [];
-
-          for (let k in collection) {
-            if (collection.hasOwnProperty(k)) {
-              if (!utils.array.contains(equals, k)) {
+              if (!utils.array.contains(toDelete, k)) {
                 newCollection.push(collection[k]);
               }
             }

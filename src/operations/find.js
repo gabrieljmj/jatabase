@@ -9,12 +9,14 @@
 'use strict';
 
 const utils = require('../utils'),
-  filter = require('./filters/filters');
+  filter = require('./filters/filters'),
+  whereClause = require('./clause/where');
 
 module.exports = function (Model) {
   return function (where, order) {
     let db = require(Model.file),
-      collection = db[Model.collection];
+      collection = db[Model.collection],
+      _whereClause = whereClause(Model);
     where = typeof where == 'undefined' || where === null ? {} : where;
     
     if (typeof where === 'object') {
@@ -30,21 +32,7 @@ module.exports = function (Model) {
           return Model.findAllSync(order);
         }
 
-        let equals = [];
-
-        for (let k in collection) {
-          if (collection.hasOwnProperty(k)) {
-            if (utils.object.propertiesEqualsTo(collection[k], where)) {
-              equals.push(k);
-            }
-          }
-        }
-
-        for (let k in equals) {
-          if (equals.hasOwnProperty(k)) {
-            result.push(collection[equals[k]]);
-          }
-        }
+        result = _whereClause(where);
 
         if (order == 'asc') {
           // Nothing
@@ -52,23 +40,19 @@ module.exports = function (Model) {
           result.reverse();
         }
 
-        for (let k in result) {
-          if (result.hasOwnProperty(k)) {
-            result[k] = filter(Model, result[k]);
-          }
+        for (let k = 0, len = result.length; k < len; k++) {
+          result[k] = filter(Model, result[k]);
         }
 
         return result.length ? result : false;
       }
     }
 
-    for (let k in collection) {
-      if (collection.hasOwnProperty(k)) {
-        if (collection[k].id === where) {
-          collection[k] = filter(Model, collection[k]);
+    for (let k = 0, len = collection.length; k < len; k++) {
+      if (collection[k].id === where) {
+        collection[k] = filter(Model, collection[k]);
 
-          return collection[k];
-        }
+        return collection[k];
       }
     }
 
