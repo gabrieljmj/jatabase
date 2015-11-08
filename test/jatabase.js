@@ -1,7 +1,6 @@
 'use strict';
 
-const assert = require('assert'),
-      expect = require('chai').expect,
+const expect = require('chai').expect,
       fs = require('fs'),
       file = {
         unchangeable: __dirname + '/db.unchangeable.json',
