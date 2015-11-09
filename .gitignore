@@ -4,3 +4,4 @@ test.js*
 test/.*
 npm-debug.log
 src/model_class.js
+.test.context.json
