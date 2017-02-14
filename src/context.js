@@ -8,11 +8,11 @@
 
 'use strict';
 
-var _json = require('./_json'),
+const _json = require('./_json'),
   fs = require('fs'),
   validateFile = require('./file.validator');
 
-let Context = function (file) {
+const Context = function (file) {
   validateFile(file);
 
   this.file = file;

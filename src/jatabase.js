@@ -13,7 +13,7 @@ const model = require('./model'),
   path = require('path'),
   Context = require('./context');
 
-var jatabase = function (file) {
+const Jatabase = function (file) {
   this.file = file;
 };
 
@@ -25,7 +25,7 @@ var jatabase = function (file) {
  *
  * @return {Model}
  */
-jatabase.prototype.createModel = function (collection, fields) {
+Jatabase.prototype.createModel = function (collection, fields) {
   let newModel = function (db, collection, _fields, context) {
     this.file = db;
     this.collection = collection;
@@ -54,4 +54,4 @@ let createContext = function (file, model) {
   return new Context(contextFile);
 };
 
-module.exports = jatabase;
+module.exports = Jatabase;
