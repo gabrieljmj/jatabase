@@ -27,9 +27,9 @@ All the persistence methods use promises, so they have an async way of using and
 Create models with the method ```createModel```. This model will contain all persistence methods lide ```add``` and ```delete```.
 ```js
 var Jatabase = require('jatabase'),
-  jd = new Jatabase(__dirname + '/file.json'),
+  jb = new Jatabase(__dirname + '/file.json'),
   models = {
-    products: jd.createModel('products', {
+    products: jb.createModel('products', {
       name: {
         type: 'string'
       },
@@ -62,7 +62,7 @@ module.exports = models;
 
 #### Async way
 ```js
-productsModel.add({name: 'Pear TV', price: 1280.00, categories: ['TV'], decription: 'Just a TV', created_at: new Date()}).then(function (success) {
+productsModel.add({name: 'Pear TV', price: 1280.00, categories: ['TV'], decription: 'Just a TV', created_at: new Date()}).then(success => {
     // ...
 });
 ```
@@ -77,28 +77,28 @@ productsModel.addSync({name: 'Pear TV', price: 2400.00, categories: ['TV'], decr
 #### Async way
 ```js
 // Using ID
-productsModel.find(3).then(function (product) {
+productsModel.find(3).then(product => {
     // ...
 });
 
 // Using price
-productsModel.find({price: 2400.00}).then(function (product) {
+productsModel.find({price: 2400.00}).then(product => {
     // ...
 });
 
 // Find one
 // Using ID
-productsModel.findOne(3).then(function (product) {
+productsModel.findOne(3).then(product => {
     // ...
 });
 
 // Using price
-productsModel.findOne({price: 2400.00}).then(function (product) {
+productsModel.findOne({price: 2400.00}).then(product => {
     // ...
 });
 
 // Find all
-productsModel.findAll().then(function (products) {
+productsModel.findAll().then(products => {
     // ...
 });
 ```
@@ -127,12 +127,12 @@ var products = productsModel.findAllSync();
 #### Async way
 ```js
 // Using ID
-productsModel.delete(3).then(function (success) {
+productsModel.delete(3).then(success => {
     // ...
 });
 
 // Using price
-productsModel.delete({price: 2400.00}).then(function (success) {
+productsModel.delete({price: 2400.00}).then(success => {
     // ...
 });
 ```
@@ -151,12 +151,12 @@ productsModel.deleteSync({price: 2400.00});
 #### Async way
 ```js
 // Using ID
-productsModel.set({price: 2500.00}, 5).then(function (success) {
+productsModel.set({price: 2500.00}, 5).then(success => {
     // ...
 });
 
 // Using name
-productsModel.set({price: 2500.00}, {name: 'Pear TV'}).then(function (success) {
+productsModel.set({price: 2500.00}, {name: 'Pear TV'}).then(success => {
     // ...
 });
 ```
@@ -175,12 +175,12 @@ productsModel.setSync({price: 2500.00}, {name: 'Pear TV'});
 #### Async way
 ```js
 // Using 
-productsModel.search({name: 'TV'}).then(function (products) {
+productsModel.search({name: 'TV'}).then(products => {
     // ...
 });
 
 // Case sensitive off
-productsModel.search({name: 'TV'}, {lowerCase: true}).then(function (products) {
+productsModel.search({name: 'TV'}, {lowerCase: true}).then(products => {
     // ...
 });
 ```
@@ -199,12 +199,12 @@ var products = productsModel.search({name: 'TV'}, {lowerCase: true});
 #### Async way
 ```js
 // Using ID
-productsModel.has(5).then(function (has) {
+productsModel.has(5).then(has => {
     // ...
 });
 
 // Using another fields
-productsModel.has({name: 'Pear TV'}).then(function (has) {
+productsModel.has({name: 'Pear TV'}).then(has => {
     // ...
 });
 ```
@@ -219,4 +219,4 @@ productsModel.has({name: 'Pear TV'});
 ```
 
 # License
-[MIT License](https://github.com/gabrieljmj/jatabase/blob/dev/LICENSE.md) 2015 © Gabriel Jacinto.
+[MIT License](https://github.com/gabrieljmj/jatabase/blob/dev/LICENSE.md) 2017 © Gabriel Jacinto.
