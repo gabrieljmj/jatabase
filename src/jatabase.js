@@ -39,15 +39,15 @@ jatabase.prototype.createModel = function (collection, fields) {
 };
 
 let createContext = function (file, model) {
-    let dir = path.dirname(file),
-      fileName = path.basename(file, '.json'),
-      contextFile = dir + '/.' + fileName + '.context.json';
+  let dir = path.dirname(file),
+    fileName = path.basename(file, '.json'),
+    contextFile = dir + '/.' + fileName + '.context.json';
 
   try {
     require(contextFile);
   } catch (e) {
     let obj = {};
-    obj[model] = [];console.log(JSON.stringify(obj));
+    obj[model] = {};
     fs.writeFileSync(contextFile, JSON.stringify(obj));
   }
 
