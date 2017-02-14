@@ -24,7 +24,7 @@ All the persistence methods use promises, so they have an async way of using and
 * [Has method](#has-method)
 
 ### Creating models
-Create models with the method ```createModel```. This model will contain all persistence methods lide ```add``` and ```delete```.
+Create models with the method ```createModel```. This model will contain all persistence methods like ```add``` and ```delete```.
 ```js
 var Jatabase = require('jatabase'),
   jb = new Jatabase(__dirname + '/file.json'),
