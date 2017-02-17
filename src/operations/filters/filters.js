@@ -8,10 +8,12 @@
 
 'use strict';
 
-const dateFilter = require('./date');
+const dateFilter = require('./date'),
+  associationsFilter = require('./associations');
 
 module.exports = function (Model, record) {
   record = dateFilter(Model, record);
+  record = associationsFilter(Model, record);
 
   return record;
 };

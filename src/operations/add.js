@@ -18,11 +18,11 @@ module.exports = function (Model) {
         context = Model.context,
         id;
 
-        if (context.lastInsertId(Model.collection) == null) {
-          id = collection.length ? collection[collection.length - 1].id + 1 : 1;
-        } else {
-          id = collection.length ? context.lastInsertId(Model.collection) + 1 : 1;
-        }
+      if (context.lastInsertId(Model.collection) == null) {
+        id = collection.length ? collection[collection.length - 1].id + 1 : 1;
+      } else {
+        id = collection.length ? context.lastInsertId(Model.collection) + 1 : 1;
+      }
     
       context.setLastInsertId(Model.collection, id);
 

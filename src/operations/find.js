@@ -18,7 +18,7 @@ module.exports = function (Model) {
       collection = db[Model.collection],
       _whereClause = whereClause(Model);
     where = typeof where == 'undefined' || where === null ? {} : where;
-    
+
     if (typeof where === 'object') {
       if (Model._validateFields(where)) {
         let result = [];

@@ -22,11 +22,13 @@ All the persistence methods use promises, so they have an async way of using and
 * [Update](#update)
 * [Search](#search)
 * [Has method](#has-method)
+* [Associations](#associations)
 
 ### Creating models
 Create models with the method ```createModel```. This model will contain all persistence methods like ```add``` and ```delete```.
+
 ```js
-var Jatabase = require('jatabase'),
+const Jatabase = require('jatabase'),
   jb = new Jatabase(__dirname + '/file.json'),
   models = {
     products: jb.createModel('products', {
@@ -188,10 +190,10 @@ productsModel.search({name: 'TV'}, {lowerCase: true}).then(products => {
 #### Sync way
 ```js
 // Using 
-var products = productsModel.search({name: 'TV'});
+var products = productsModel.searchSync({name: 'TV'});
 
 // Case sensitive off
-var products = productsModel.search({name: 'TV'}, {lowerCase: true});
+var products = productsModel.searchSync({name: 'TV'}, {lowerCase: true});
 ```
 
 ### Has method
@@ -212,10 +214,27 @@ productsModel.has({name: 'Pear TV'}).then(has => {
 #### Sync way
 ```js
 // Using ID
-productsModel.has(5);
+productsModel.hasSync(5);
 
 // Using another fields
-productsModel.has({name: 'Pear TV'});
+productsModel.hasSync({name: 'Pear TV'});
+```
+
+### Associations
+Fields can be represented by another collections. There are two kinds of associations: by foreign id or array of foreign ids.
+This way, on a consult, all the ids will be transformed to objects.
+
+```js
+const usersLevelsModel = jb.createModel('users_levels', {
+    name: {type: 'string'}
+  }),
+  usersModel = jb.createModel('users', {
+    name: {type: 'string'},
+    level: {
+      type: 'number',
+      associatedTo: 'users_levels'
+    }
+  });
 ```
 
 # License
