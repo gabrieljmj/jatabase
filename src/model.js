@@ -157,9 +157,9 @@ Model.prototype.find = function (where, order) {
  * @return {Object}
  */
 Model.prototype.findOneSync = function (where) {
-  let all = this.findSync(where);
-  
-  return all != false ? all[0] : false;
+  let result = this.findSync(where);
+
+  return result == false ? false : result instanceof Array ? result[0] : result;
 };
 
 /**
