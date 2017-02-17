@@ -17,10 +17,10 @@
  * @return {Object}
  */
 module.exports = function (Model, record) {
-  Object.keys(record).map(function (index, el) {
+  Object.keys(record).map(function (index) {
     if (index != 'id') {
       record[index] = Model.fields[index].type.toLowerCase() == 'date'
-        ? new Date(record[index]) : record[index];
+          ? new Date(record[index]) : record[index];
     }
   });
 
