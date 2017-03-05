@@ -47,7 +47,7 @@ module.exports = function (Model) {
       let index;
       
       for (let k in collection) {
-        if (collection[k].id == where) {
+        if (collection[k]._id == where) {
           index = k;
         }
       }

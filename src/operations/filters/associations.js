@@ -18,7 +18,7 @@
  */
 module.exports = function(Model, record) {
   Object.keys(record).map(function (index) {
-    if (index != 'id') {
+    if (index != '_id') {
       let field = Model.fields[index];
 
       if (!!field.associatedTo) {

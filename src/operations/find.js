@@ -49,7 +49,7 @@ module.exports = function (Model) {
     }
 
     for (let k = 0, len = collection.length; k < len; k++) {
-      if (collection[k].id === where) {
+      if (collection[k]._id === where) {
         collection[k] = filter(Model, collection[k]);
 
         return collection[k];

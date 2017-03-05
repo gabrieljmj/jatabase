@@ -34,7 +34,7 @@ module.exports = function (Model) {
           if (collection.hasOwnProperty(k)) {
             for (let i in result) {
               if (result.hasOwnProperty(i)) {
-                if (parseInt(collection[k].id) == parseInt(result[i].id)) {
+                if (parseInt(collection[k]._id) == parseInt(result[i]._id)) {
                   collection[k] = result[i];
                 }
               }
@@ -48,7 +48,7 @@ module.exports = function (Model) {
 
         for (let k in collection) {
           if (collection.hasOwnProperty(k)) {
-            if (parseInt(collection[k].id) == parseInt(result.id)) {
+            if (parseInt(collection[k]._id) == parseInt(result._id)) {
               collection[k] = result;
             }
           }

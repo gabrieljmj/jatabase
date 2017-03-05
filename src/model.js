@@ -337,7 +337,7 @@ Model.prototype._validateFields = function (fields) {
     for (let field in fields) {
       if (fields.hasOwnProperty(field)) {
         if (!utils.array.contains(Object.keys(this.fields), field)) {
-          if (field != 'id') {
+          if (field != '_id') {
             throw 'Unknown field in model ' + this.collection + ': ' + field + '.';
           }
         } else {

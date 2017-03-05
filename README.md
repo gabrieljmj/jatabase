@@ -30,25 +30,23 @@ Create models with the method ```createModel```. This model will contain all per
 ```js
 const Jatabase = require('jatabase'),
   jb = new Jatabase(__dirname + '/file.json'),
-  models = {
-    products: jb.createModel('products', {
-      name: {
-        type: 'string'
-      },
-      price: {
-        type: 'number'
-      },
-      categories: {
-        type: 'array'
-      },
-      description: {
-        type: 'string'
-      },
-      created_at: {
-        type: 'date'
-      }
-    })
-  };
+  productsModel = jb.createModel('products', {
+    name: {
+      type: 'string'
+    },
+    price: {
+      type: 'number'
+    },
+    categories: {
+      type: 'array'
+    },
+    description: {
+      type: 'string'
+    },
+    created_at: {
+      type: 'date'
+    }
+  });
 
 module.exports = models;
 ```
@@ -173,6 +171,8 @@ productsModel.setSync({price: 2500.00}, {name: 'Pear TV'});
 ```
 
 ### Search
+
+Only works with string fields.
 
 #### Async way
 ```js

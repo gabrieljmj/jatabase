@@ -1,1 +1,1 @@
-{"cities":[{"id":1,"name":"Sao Paulo","country":1},{"id":2,"name":"Rio de Janeiro","country":1},{"id":3,"name":"New York","country":2}],"countries":[{"id":1,"name":"Brazil"},{"id":2,"name":"USA"}]}
+{"cities":[{"_id":1,"name":"Sao Paulo","country":1},{"_id":2,"name":"Rio de Janeiro","country":1},{"_id":3,"name":"New York","country":2}],"countries":[{"_id":1,"name":"Brazil"},{"_id":2,"name":"USA"}]}

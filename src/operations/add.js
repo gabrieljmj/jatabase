@@ -19,14 +19,14 @@ module.exports = function (Model) {
         id;
 
       if (context.lastInsertId(Model.collection) == null) {
-        id = collection.length ? collection[collection.length - 1].id + 1 : 1;
+        id = collection.length ? collection[collection.length - 1]._id + 1 : 1;
       } else {
         id = collection.length ? context.lastInsertId(Model.collection) + 1 : 1;
       }
     
       context.setLastInsertId(Model.collection, id);
 
-      collection.push(utils.object.merge({id: id}, fields));
+      collection.push(utils.object.merge({_id: id}, fields));
       Model._saveModificationOnKey(Model.collection, collection);
     }
   }

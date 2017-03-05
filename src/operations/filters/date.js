@@ -18,7 +18,7 @@
  */
 module.exports = function (Model, record) {
   Object.keys(record).map(function (index) {
-    if (index != 'id') {
+    if (index != '_id') {
       record[index] = Model.fields[index].type.toLowerCase() == 'date'
           ? new Date(record[index]) : record[index];
     }

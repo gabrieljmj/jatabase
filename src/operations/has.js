@@ -14,8 +14,8 @@ const utils = require('../utils'),
 module.exports = function (Model) {
   return function (where) {
     let db = require(Model.file),
-          collection = db[Model.collection],
-          _whereClause = whereClause(Model);
+      collection = db[Model.collection],
+      _whereClause = whereClause(Model);
     where = typeof where == 'undefined' || where === null ? {} : where;
           
     if (typeof where == 'object') {
@@ -30,7 +30,7 @@ module.exports = function (Model) {
 
     for (let k in collection) {
       if (collection.hasOwnProperty(k)) {
-        if (collection[k].id == where) {
+        if (collection[k]._id == where) {
           return true;
         }
       }

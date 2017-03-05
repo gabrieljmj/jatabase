@@ -13,9 +13,9 @@ const expect = require('chai').expect,
   Jatabase = require('../src/jatabase'),
   restore = file => {
     fs.writeFile(file, JSON.stringify({cities: [
-      {id: 1, name: 'Sao Paulo'},
-      {id: 2, name: 'Rio de Janeiro'},
-      {id: 3, name: 'New York'}
+      {_id: 1, name: 'Sao Paulo'},
+      {_id: 2, name: 'Rio de Janeiro'},
+      {_id: 3, name: 'New York'}
     ]}));
   },
   objectsAreEqual = (obj1, obj2) => {
@@ -46,8 +46,8 @@ describe('Jatabase tests', () => {
 
       let now = require(file.changeable_delete),
         expected = {cities: [
-          {id: 1, name: 'Sao Paulo'},
-          {id: 3, name: 'New York'}
+          {_id: 1, name: 'Sao Paulo'},
+          {_id: 3, name: 'New York'}
         ]};
 
       expect(objectsAreEqual(now, expected)).to.equal(true);
@@ -61,8 +61,8 @@ describe('Jatabase tests', () => {
 
       let now = require(file.changeable_delete),
         expected = {cities: [
-          {id: 1, name: 'Sao Paulo'},
-          {id: 2, name: 'Rio de Janeiro'}
+          {_id: 1, name: 'Sao Paulo'},
+          {_id: 2, name: 'Rio de Janeiro'}
         ]};
       expect(objectsAreEqual(now, expected)).to.equal(true);
     });
@@ -88,10 +88,10 @@ describe('Jatabase tests', () => {
 
       let now = require(file.changeable_add),
           expected = {cities: [
-            {id: 1, name: 'Sao Paulo'},
-            {id: 2, name: 'Rio de Janeiro'},
-            {id: 3, name: 'New York'},
-            {id: 4, name: 'Londres'}
+            {_id: 1, name: 'Sao Paulo'},
+            {_id: 2, name: 'Rio de Janeiro'},
+            {_id: 3, name: 'New York'},
+            {_id: 4, name: 'Londres'}
           ]};
 
       expect(objectsAreEqual(now, expected)).to.equal(true);
@@ -105,10 +105,10 @@ describe('Jatabase tests', () => {
 
       let now = require(file.changeable_add),
         expected = {cities: [
-          {id: 1, name: 'Sao Paulo'},
-          {id: 2, name: 'Rio de Janeiro'},
-          {id: 3, name: 'New York'},
-          {id: 4, name: 'Londres'}
+          {_id: 1, name: 'Sao Paulo'},
+          {_id: 2, name: 'Rio de Janeiro'},
+          {_id: 3, name: 'New York'},
+          {_id: 4, name: 'Londres'}
         ]};
 
       expect(objectsAreEqual(now, expected)).to.equal(true);
@@ -126,10 +126,10 @@ describe('Jatabase tests', () => {
 
       let now = require(file.changeable_add),
         expected = {cities: [
-          {id: 1, name: 'Sao Paulo', created_at: new Date('2017-02-14T12:15:44.053Z')},
-          {id: 2, name: 'Rio de Janeiro', created_at: new Date('2017-02-14T12:15:44.053Z')},
-          {id: 3, name: 'New York', created_at: new Date('2017-02-14T12:15:44.053Z')},
-          {id: 4, name: 'Londres', created_at: date}
+          {_id: 1, name: 'Sao Paulo', created_at: new Date('2017-02-14T12:15:44.053Z')},
+          {_id: 2, name: 'Rio de Janeiro', created_at: new Date('2017-02-14T12:15:44.053Z')},
+          {_id: 3, name: 'New York', created_at: new Date('2017-02-14T12:15:44.053Z')},
+          {_id: 4, name: 'Londres', created_at: date}
         ]};
 
       expect(objectsAreEqual(now, expected)).to.equal(true);
@@ -140,7 +140,7 @@ describe('Jatabase tests', () => {
     it('should find record by id', () => {
       let jb = new Jatabase(file.unchangeable),
         model = jb.createModel('cities', {name: {type: 'string'}}),
-        expected = {id: 1, name: 'Sao Paulo'},
+        expected = {_id: 1, name: 'Sao Paulo'},
         given = model.findSync(1);
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
@@ -149,7 +149,7 @@ describe('Jatabase tests', () => {
     it('should find record by fields', () => {
       let jb = new Jatabase(file.unchangeable),
         model = jb.createModel('cities', {name: {type: 'string'}}),
-        expected = {id: 1, name: 'Sao Paulo'},
+        expected = {_id: 1, name: 'Sao Paulo'},
         given = model.findSync({name: 'Sao Paulo'});
 
       expect(objectsAreEqual(expected, given)).to.equal(true);
@@ -189,7 +189,7 @@ describe('Jatabase tests', () => {
           name: {type: 'string'},
           country: {type: 'number', associatedTo: 'countries'}
         }),
-        expected = {id: 1, name: 'São Paulo', country: {id: 1, name: 'Brazil'}},
+        expected = {_id: 1, name: 'São Paulo', country: {_id: 1, name: 'Brazil'}},
         given = citiesModel.findSync(1);
 
         expect(objectsAreEqual(expected, given)).to.equal(true);
@@ -275,9 +275,9 @@ describe('Jatabase tests', () => {
       model.setSync({name: 'Los Angeles'}, 3);
 
       let expected = {cities: [
-          {id: 1, name: 'Sao Paulo'},
-          {id: 2, name: 'Rio de Janeiro'},
-          {id: 3, name: 'Los Angeles'}
+          {_id: 1, name: 'Sao Paulo'},
+          {_id: 2, name: 'Rio de Janeiro'},
+          {_id: 3, name: 'Los Angeles'}
         ]},
         given = require(file.changeable_set);
 
@@ -291,9 +291,9 @@ describe('Jatabase tests', () => {
       model.setSync({name: 'Dubai'}, {name: 'Rio de Janeiro'});
 
       let expected = {cities: [
-          {id: 1, name: 'Sao Paulo'},
-          {id: 2, name: 'Dubai'},
-          {id: 3, name: 'Los Angeles'}
+          {_id: 1, name: 'Sao Paulo'},
+          {_id: 2, name: 'Dubai'},
+          {_id: 3, name: 'Los Angeles'}
         ]},
         given = require(file.changeable_set);
 
@@ -307,13 +307,13 @@ describe('Jatabase tests', () => {
         model = jb.createModel('cities', {name: {type: 'string'}});
 
       let expected = [
-          {id: 1, name: 'Sao Paulo'}
+          {_id: 1, name: 'Sao Paulo'}
         ],
         given = model.searchSync({name: 'Sao'});
 
       expect(
         given.length === 1 &&
-        given[0].id == expected[0].id &&
+        given[0]._id == expected[0]._id &&
         given[0].name == expected[0].name
       ).to.equal(true);
     });
@@ -323,16 +323,16 @@ describe('Jatabase tests', () => {
         model = jb.createModel('cities', {name: {type: 'string'}});
 
       let expected = [
-          {id: 1, name: 'Sao Paulo'},
-          {id: 2, name: 'Rio de Janeiro'}
+          {_id: 1, name: 'Sao Paulo'},
+          {_id: 2, name: 'Rio de Janeiro'}
         ],
         given = model.searchSync({name: 'a'});
 
       expect(
         given.length === 2 &&
-        (given[0].id == expected[0].id &&
+        (given[0]._id == expected[0]._id &&
         given[0].name == expected[0].name) &&
-        (given[1].id == expected[1].id &&
+        (given[1]._id == expected[1]._id &&
         given[1].name == expected[1].name)
       ).to.equal(true);
     });
@@ -351,13 +351,13 @@ describe('Jatabase tests', () => {
         model = jb.createModel('cities', {name: {type: 'string'}});
 
       let expected = [
-          {id: 2, name: 'Rio de Janeiro'}
+          {_id: 2, name: 'Rio de Janeiro'}
         ],
         given = model.searchSync({name: 'rio'}, {lowerCase: true});
 
       expect(
         given.length === 1 &&
-        (given[0].id == expected[0].id &&
+        (given[0]._id == expected[0]._id &&
         given[0].name == expected[0].name)
       ).to.equal(true);
     });
